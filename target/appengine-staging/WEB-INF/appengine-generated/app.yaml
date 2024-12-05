@@ -1,0 +1,24 @@
+runtime: java17
+inbound_services:
+- warmup
+app_engine_apis: True
+auto_id_policy: default
+env_variables:
+  'ENDPOINTS_SERVICE_NAME': 'tinyldf-443314.appspot.com'
+handlers:
+- url: /
+  script: unused
+  login: optional
+  secure: optional
+- url: /hello
+  script: unused
+  login: optional
+  secure: optional
+- url: /.*/
+  script: unused
+  login: optional
+  secure: optional
+- url: /_ah/.*
+  script: unused
+  login: optional
+  secure: optional
