@@ -1,0 +1,67 @@
+<%3Chttp://dx.doi.org/10.1002/9781118663202.wberen606%3E> <rdf:type> "foaf:Document" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1016/j.dci.2015.12.006%3E> <%3Chttp://purl.org/ontology/bibo/pageStart%3E> "\"102\"" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1016/j.dci.2015.12.006%3E> <dcterm:date> "\"2016-05\"" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1016/j.jinsphys.2017.06.013%3E> <rdf:type> "foaf:Document" <http://dbpedia.org/graph> .
+<%3Chttp://www.grid.ac/institutes/grid.152326.1%3E> <%3Chttp://www.grid.ac/ontology/hasWikidataId%3E> "<http://www.wikidata.org/entity/Q29052>" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1016/j.jinsphys.2017.06.013%3E> <dcterm:title> "\"Mosquito aging modulates the heart rate and the proportional directionality of heart contractions\"@en" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1177/1536504211418463%3E> <rdf:type> "foaf:Document" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1177/1536504211418463%3E> <dcterm:title> "\"Let My People Go\"@en" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1016/j.dci.2015.12.006%3E> <dcterm:title> "\"Insect immunology and hematopoiesis\"@en" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1016/j.dci.2015.12.006%3E> <rdf:type> "foaf:Document" <http://dbpedia.org/graph> .
+<%3Chttp://www.grid.ac/institutes/grid.152326.1%3E> <skos:altLabel> "\"Vandy\"" <http://dbpedia.org/graph> .
+<%3Chttp://www.grid.ac/institutes/grid.152326.1%3E> <%3Chttp://www.w3.org/2003/01/geo/wgs84_pos#lat%3E> "\"36.144937\"^^xsd:float " <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1177/1536504211418463%3E> <%3Chttp://purl.org/ontology/bibo/pageEnd%3E> "\"73\"" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1177/1536504211418463%3E> <%3Chttp://purl.org/ontology/bibo/pageStart%3E> "\"72\"" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1002/9781118663202.wberen606%3E> <rdfs:label> "\"Jews in the United States\"@en" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1353/ajh.2014.0012%3E> <%3Chttp://purl.org/ontology/bibo/pageStart%3E> "\"17\"" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1002/9781118663202.wberen606%3E> <%3Chttp://purl.org/ontology/bibo/pageEnd%3E> "\"4\"" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1353/ajh.2014.0012%3E> <%3Chttp://purl.org/ontology/bibo/volume%3E> "\"98\"" <http://dbpedia.org/graph> .
+<%3Chttp://www.grid.ac/institutes/grid.152326.1%3E> <%3Chttp://www.grid.ac/ontology/countryCode%3E> "\"US\"" <http://dbpedia.org/graph> .
+<%3Chttp://orcid.org/0000-0002-3178-0201%3E> <rdf:type> "foaf:Person" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1016/j.jinsphys.2017.06.013%3E> <dcterm:date> "\"2017-08\"" <http://dbpedia.org/graph> .
+<%3Chttp://www.grid.ac/institutes/grid.152326.1%3E> <%3Chttp://www.grid.ac/ontology/wikipediaPage%3E> "<http://en.wikipedia.org/wiki/Vanderbilt_University>" <http://dbpedia.org/graph> .
+<%3Chttp://orcid.org/0000-0003-2360-0589%3E> <rdfs:label> "\"Shaul Kelner\"" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1002/9781118663202.wberen606%3E> <dcterm:date> "\"2015-12-30\"" <http://dbpedia.org/graph> .
+<%3Chttp://www.grid.ac/institutes/grid.152326.1%3E> <rdfs:label> "\"Vanderbilt University\"" <http://dbpedia.org/graph> .
+<%3Chttp://www.grid.ac/institutes/grid.152326.1%3E> <foaf:homepage> "<http://www.vanderbilt.edu/>" <http://dbpedia.org/graph> .
+<%3Chttp://orcid.org/0000-0003-2360-0589%3E> <foaf:givenName> "\"Shaul\"" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1016/j.jinsphys.2017.06.013%3E> <%3Chttp://purl.org/ontology/bibo/pageEnd%3E> "\"56\"" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1002/9781118663202.wberen606%3E> <%3Chttp://purl.org/ontology/bibo/pageStart%3E> "\"1\"" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1353/ajh.2014.0012%3E> <rdf:type> "foaf:Document" <http://dbpedia.org/graph> .
+<%3Chttp://orcid.org/0000-0002-3178-0201%3E> <foaf:familyName> "\"Hillyer\"" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1016/j.jinsphys.2017.06.013%3E> <%3Chttp://purl.org/ontology/bibo/pageStart%3E> "\"47\"" <http://dbpedia.org/graph> .
+<%3Chttp://orcid.org/0000-0002-3178-0201%3E> <dcterm:modified> "\"2017-08-11T21:51:34.631Z\"^^xsd:dateTime" <http://dbpedia.org/graph> .
+<%3Chttp://www.grid.ac/institutes/grid.152326.1%3E> <%3Chttp://www.grid.ac/ontology/cityName%3E> "\"Nashville\"" <http://dbpedia.org/graph> .
+<%3Chttp://orcid.org/0000-0002-3178-0201%3E> <dcterm:created> "\"2014-12-22T22:25:56.900Z\"^^xsd:dateTime" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1002/9781118663202.wberen606%3E> <dcterm:title> "\"Jews in the United States\"@en" <http://dbpedia.org/graph> .
+<%3Chttp://www.grid.ac/institutes/grid.152326.1%3E> <rdf:type> "foaf:Organization" <http://dbpedia.org/graph> .
+<%3Chttp://orcid.org/0000-0003-2360-0589%3E> <foaf:familyName> "\"Kelner\"" <http://dbpedia.org/graph> .
+<%3Chttp://orcid.org/0000-0003-2360-0589%3E> <dcterm:created> "\"2017-05-24T13:47:09.768Z\"^^xsd:dateTime" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1177/1536504211418463%3E> <rdfs:label> "\"Let My People Go\"@en" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1016/j.dci.2015.12.006%3E> <rdfs:label> "\"Insect immunology and hematopoiesis\"@en" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1016/j.jinsphys.2017.06.013%3E> <rdfs:label> "\"Mosquito aging modulates the heart rate and the proportional directionality of heart contractions\"@en" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1016/j.dci.2015.12.006%3E> <dcterm:creator> "<http://orcid.org/0000-0002-3178-0201>" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1177/1536504211418463%3E> <dcterm:date> "\"2011-08\"" <http://dbpedia.org/graph> .
+<%3Chttp://www.grid.ac/institutes/grid.152326.1%3E> <%3Chttp://www.grid.ac/ontology/establishedYear%3E> "\"1873\"^^xsd:gYear " <http://dbpedia.org/graph> .
+<%3Chttp://orcid.org/0000-0002-3178-0201%3E> <%3Chttp://www.loc.gov/mads/rdf/v1#hasAffiliation%3E> "<http://www.grid.ac/institutes/grid.152326.1>" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1016/j.jinsphys.2017.06.013%3E> <dcterm:creator> "<http://orcid.org/0000-0002-3178-0201>" <http://dbpedia.org/graph> .
+<%3Chttp://orcid.org/0000-0002-3178-0201%3E> <foaf:givenName> "\"Julian\"" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1353/ajh.2014.0012%3E> <%3Chttp://purl.org/ontology/bibo/pageEnd%3E> "\"22\"" <http://dbpedia.org/graph> .
+<%3Chttp://www.grid.ac/institutes/grid.152326.1%3E> <%3Chttp://www.w3.org/2003/01/geo/wgs84_pos#long%3E> "\"-86.802687\"^^xsd:float " <http://dbpedia.org/graph> .
+<%3Chttp://www.grid.ac/institutes/grid.152326.1%3E> <rdf:type> "<http://www.grid.ac/ontology/Education>" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1002/9781118663202.wberen606%3E> <dcterm:creator> "<http://orcid.org/0000-0003-2360-0589>" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1016/j.dci.2015.12.006%3E> <%3Chttp://purl.org/ontology/bibo/pageEnd%3E> "\"118\"" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1177/1536504211418463%3E> <dcterm:creator> "<http://orcid.org/0000-0003-2360-0589>" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1353/ajh.2014.0012%3E> <dcterm:title> "\"Ethnographers and History\"@en" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1016/j.dci.2015.12.006%3E> <%3Chttp://purl.org/ontology/bibo/volume%3E> "\"58\"" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1353/ajh.2014.0012%3E> <dcterm:creator> "<http://orcid.org/0000-0003-2360-0589>" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1016/j.jinsphys.2017.06.013%3E> <%3Chttp://purl.org/ontology/bibo/volume%3E> "\"101\"" <http://dbpedia.org/graph> .
+<%3Chttp://orcid.org/0000-0002-3178-0201%3E> <rdfs:label> "\"Julian Hillyer\"" <http://dbpedia.org/graph> .
+<%3Chttp://www.grid.ac/institutes/grid.152326.1%3E> <%3Chttp://www.grid.ac/ontology/countryName%3E> "\"United States\"" <http://dbpedia.org/graph> .
+<%3Chttp://orcid.org/0000-0003-2360-0589%3E> <%3Chttp://www.loc.gov/mads/rdf/v1#hasAffiliation%3E> "<http://www.grid.ac/institutes/grid.152326.1>" <http://dbpedia.org/graph> .
+<%3Chttp://orcid.org/0000-0003-2360-0589%3E> <rdf:type> "foaf:Person" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1353/ajh.2014.0012%3E> <rdfs:label> "\"Ethnographers and History\"@en" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1353/ajh.2014.0012%3E> <dcterm:date> "\"2014\"" <http://dbpedia.org/graph> .
+<%3Chttp://orcid.org/0000-0003-2360-0589%3E> <dcterm:modified> "\"2017-05-24T13:56:27.187Z\"^^xsd:dateTime" <http://dbpedia.org/graph> .
+<%3Chttp://dx.doi.org/10.1177/1536504211418463%3E> <%3Chttp://purl.org/ontology/bibo/volume%3E> "\"10\"" <http://dbpedia.org/graph> .
+
