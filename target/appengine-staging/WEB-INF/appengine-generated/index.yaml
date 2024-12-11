@@ -1,10 +1,6 @@
 indexes:
-- kind: "Friend"
+- kind: "Quad"
   properties:
-  - name: "friends"
-  - name: "age"
-- kind: "Score"
-  properties:
-  - name: "name"
-  - name: "score"
-    direction: desc
+  - name: "predicate"
+  - name: "timestamp"
+    direction: asc

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Linked Data Fragment</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <script src="https://unpkg.com/mithril/mithril.js"></script>
+</head>
+<body>
+
+<script>
+    // Modèle pour l'insertion de quads
+    var QuadModel = {
+        subject: "",
+        predicate: "",
+        object: "",
+        graph: "",
+        insertQuad: function () {
+            return m.request({
+                method: "POST",
+                url: "/ldf", // Remplace par l'URL de ton backend
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer <token>" // Ajoute ton système d'authentification
+                },
+                body: {
+                    subject: QuadModel.subject,
+                    predicate: QuadModel.predicate,
+                    object: QuadModel.object,
+                    graph: QuadModel.graph,
+                },
+            })
+            .then(() => {
+                alert("Quad inséré avec succès !");
+                QuadModel.subject = "";
+                QuadModel.predicate = "";
+                QuadModel.object = "";
+                QuadModel.graph = "";
+            })
+            .catch((error) => {
+                console.error("Erreur :", error);
+                alert("Erreur lors de l'insertion du quad.");
+            });
+        },
+    };
+
+    // Vue pour l'insertion de quads
+    var InsertQuadView = {
+        view: function () {
+            return m('div', [
+                m('h1', { class: 'title' }, "Insertion de Quads"),
+                m('form', { onsubmit: (e) => e.preventDefault() }, [
+                    m("input[type=text][placeholder=Sujet]", {
+                        value: QuadModel.subject,
+                        class: "input is-rounded",
+                        oninput: (e) => QuadModel.subject = e.target.value
+                    }),
+                    m("input[type=text][placeholder=Prédicat]", {
+                        value: QuadModel.predicate,
+                        class: "input is-rounded",
+                        oninput: (e) => QuadModel.predicate = e.target.value
+                    }),
+                    m("input[type=text][placeholder=Objet]", {
+                        value: QuadModel.object,
+                        class: "input is-rounded",
+                        oninput: (e) => QuadModel.object = e.target.value
+                    }),
+                    m("input[type=text][placeholder=Graph]", {
+                        value: QuadModel.graph,
+                        class: "input is-rounded",
+                        oninput: (e) => QuadModel.graph = e.target.value
+                    }),
+                    m("button", {
+                        class: "button is-link",
+                        onclick: QuadModel.insertQuad
+                    }, "Insérer"),
+                ]),
+            ]);
+        }
+    };
+
+    // Modèle pour les requêtes
+    var QueryModel = {
+        predicate: "",
+        results: [],
+        executionTime: null,
+        cursor: null, // Pagination
+        fetchQuads: function () {
+            var url = QueryModel.cursor
+                ? `/ldf?predicate=${encodeURIComponent(QueryModel.predicate)}&cursor=${QueryModel.cursor}`
+                : `/ldf?predicate=${encodeURIComponent(QueryModel.predicate)}`;
+            var startTime = performance.now();
+            return m.request({ method: "GET", url: url })
+                .then((response) => {
+                    QueryModel.results = response.quads;
+                    QueryModel.cursor = response.nextCursor;
+                    QueryModel.executionTime = performance.now() - startTime;
+                })
+                .catch((error) => {
+                    console.error("Erreur :", error);
+                    alert("Erreur lors de la requête.");
+                });
+        }
+    };
+
+    // Vue pour les requêtes
+    var QueryQuadView = {
+        view: function () {
+            return m('div', [
+                m('h1', { class: 'title' }, "Requêtage de Quads"),
+                m('form', { onsubmit: (e) => e.preventDefault() }, [
+                    m("input[type=text][placeholder=Prédicat]", {
+                        value: QueryModel.predicate,
+                        class: "input is-rounded",
+                        oninput: (e) => QueryModel.predicate = e.target.value
+                    }),
+                    m("button", {
+                        class: "button is-link",
+                        onclick: QueryModel.fetchQuads
+                    }, "Rechercher"),
+                ]),
+                m('div', [
+                    QueryModel.executionTime && m("p", `Temps d'exécution : ${QueryModel.executionTime.toFixed(2)} ms`),
+                    m('table', { class: 'table is-striped' }, [
+                        m('thead', m('tr', [
+                            m('th', "Sujet"),
+                            m('th', "Prédicat"),
+                            m('th', "Objet"),
+                            m('th', "Graph"),
+                        ])),
+                        m('tbody',
+                            QueryModel.results.map((quad) =>
+                                m('tr', [
+                                    m('td', quad.subject),
+                                    m('td', quad.predicate),
+                                    m('td', quad.object),
+                                    m('td', quad.graph),
+                                ])
+                            )
+                        ),
+                    ]),
+                    QueryModel.cursor && m("button", {
+                        class: "button is-link",
+                        onclick: QueryModel.fetchQuads
+                    }, "Page suivante"),
+                ]),
+            ]);
+        }
+    };
+
+    // Vue principale
+    var MainView = {
+        view: function () {
+            return m('div', { class: 'container' }, [
+                m("h1", { class: 'title' }, 'Linked Data Fragment App'),
+                m('div', { class: 'tile is-ancestor' }, [
+                    m('div', { class: 'tile is-child box' }, m(InsertQuadView)),
+                    m('div', { class: 'tile is-child box' }, m(QueryQuadView)),
+                ])
+            ]);
+        }
+    };
+
+    // Montage de l'application
+    m.mount(document.body, MainView);
+
+</script>
+</body>
+</html>
