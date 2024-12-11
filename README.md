@@ -2,7 +2,7 @@
 
 ## Contexte
 
-Wikidata propose un serveur de **Fragments de Données Liées** (LDF) accessible à l'adresse [Wikidata LDF](https://query.wikidata.org/bigdata/ldf). Ce serveur permet de traiter des requêtes basées sur des motifs triples et de renvoyer les résultats en RDF sous forme de pages. Vous trouverez plus de documentation à propos de cette fonctionnalité [ici](https://www.wikidata.org/wiki/Wikidata:Data_access/fr#Linked_Data_Fragments_endpoint).
+Wikidata propose un serveur de **Fragments de Données Liées** (LDF) accessible à l'adresse [Wikidata LDF](https://query.wikidata.org/bigdata/ldf). Ce serveur permet de traiter des requêtes basées sur des motifs triples et de renvoyer les résultats en RDF sous forme de pages. 
 
 Un serveur LDF permet de traiter des requêtes SPARQL à l'aide de clients intelligents, comme [Comunica](https://query.comunica.dev/), qui peut être testé en direct. Le but de ce projet est de développer un serveur simple de Fragments de Données Liées capable de gérer des **requêtes basées sur des motifs de quadruplets**, tout en étant déployé sur **Google Cloud** sous forme d'application App Engine.
 
