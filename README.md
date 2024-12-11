@@ -9,7 +9,7 @@ Un serveur LDF permet de traiter des requêtes SPARQL à l'aide de clients intel
 ## Les données utilisées
 
 Les données utilisées proviennent de trois sources différentes :
-- [Données biomdicales](https://download.bio2rdf.org/#/current/clinicaltrials/)
+- [Données biomédicales](https://download.bio2rdf.org/#/current/clinicaltrials/)
 - [Digital education ressources](https://github.com/HeardLibrary/digital-scholarship/blob/master/data/rdf/vandy/vandy-triples.csv)
 - [Dataset sur les accidents corporels de la route en France](https://www.data.gouv.fr/fr/datasets/bases-de-donnees-annuelles-des-accidents-corporels-de-la-circulation-routiere-annees-de-2005-a-2023/)
 - [Dataset sur les aéroports, compagnies aériennes et routes](https://www.kaggle.com/datasets/ahmadrafiee/airports-airlines-planes-and-routes-update-2024?select=airports.csv)
