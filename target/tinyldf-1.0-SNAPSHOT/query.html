@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Linked Data Fragment</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <script src="https://unpkg.com/mithril/mithril.js"></script>
+</head>
+<body>
+
+<script>
+    var QueryModel = {
+        subject: "",
+        predicate: "",
+        object: "",
+        graph: "",
+        results: [],
+        executionTime: null,
+        cursor: null,
+        fetchQuads: function () {
+            if (QueryModel.subject && QueryModel.object && QueryModel.object || QueryModel.subject == "" && QueryModel.object == "" && QueryModel.object == ""){
+            var url = QueryModel.cursor
+                ? `_ah/api/myApi/v1/getQuads/${encodeURIComponent(QueryModel.cursor)}`+
+                `/?subject=${encodeURIComponent(QueryModel.subject)}&`+
+                   `predicate=${encodeURIComponent(QueryModel.predicate)}&`+
+                   `object=${encodeURIComponent(QueryModel.object)}`
+                : `_ah/api/myApi/v1/getQuads/null?subject=${encodeURIComponent(QueryModel.subject)}&`+
+                   `predicate=${encodeURIComponent(QueryModel.predicate)}&`+
+                   `object=${encodeURIComponent(QueryModel.object)}`;
+            var startTime = performance.now();
+            return m.request({ method: "GET", url: url })
+                .then((response) => {
+                    QueryModel.results = response.quads;
+                    QueryModel.cursor = response.nextCursor;
+                    QueryModel.executionTime = performance.now() - startTime;
+                })
+                .catch((error) => {
+                    console.error("Erreur :", error);
+                    alert("Erreur lors de la requête.");
+                });
+            }
+            else{
+                alert("Veuillez écrire un sujet, prédicat et un objet");
+            }
+        }
+    };
+
+    var QueryQuadView = {
+        view: function () {
+            return m('div', [
+                m('h1', { class: 'title' }, "Requêtage de Quads"),
+                m('form', { onsubmit: (e) => e.preventDefault() }, [
+                    m("input[type=text][placeholder=Sujet]", {
+                        value: QueryModel.subject,
+                        class: "input is-rounded",
+                        oninput: (e) => QueryModel.subject = e.target.value
+                    }),
+                    m("input[type=text][placeholder=Prédicat]", {
+                        value: QueryModel.predicate,
+                        class: "input is-rounded",
+                        oninput: (e) => QueryModel.predicate = e.target.value
+                    }),
+                    m("input[type=text][placeholder=Objet]", {
+                        value: QueryModel.object,
+                        class: "input is-rounded",
+                        oninput: (e) => QueryModel.object = e.target.value
+                    }),
+                    // m("input[type=text][placeholder=Graph]", {
+                    //     value: QueryModel.Graph,
+                    //     class: "input is-rounded",
+                    //     oninput: (e) => QueryModel.graph = e.target.value
+                    // }),
+                    m("button", {
+                        class: "button is-link",
+                        onclick: QueryModel.fetchQuads
+                    }, "Rechercher"),
+                ]),
+                m('div', [
+                    QueryModel.executionTime && m("p", `Temps d'exécution : ${QueryModel.executionTime.toFixed(2)} ms`),
+                    m('table', { class: 'table is-striped' }, [
+                        m('thead', m('tr', [
+                            m('th', "Sujet"),
+                            m('th', "Prédicat"),
+                            m('th', "Objet"),
+                            m('th', "Graph"),
+                        ])),
+                        m('tbody',
+                            QueryModel.results.map((quad) =>
+                                m('tr', [
+                                    m('td', quad.subject),
+                                    m('td', quad.predicate),
+                                    m('td', quad.object),
+                                    m('td', quad.graph),
+                                ])
+                            )
+                        ),
+                    ]),
+                    QueryModel.cursor && m("button", {
+                        class: "button is-link",
+                        onclick: QueryModel.fetchQuads
+                    }, "Page suivante"),
+                ]),
+            ]);
+        }
+    };
+
+    var MainView = {
+        view: function () {
+            return m('div', { class: 'container' }, [
+                m("h1", { class: 'title' }, 'Linked Data Fragment App'),
+                m('div', { class: 'tile is-ancestor' }, [
+                    m('div', { class: 'tile is-child box' }, m(QueryQuadView)),
+                ])
+            ]);
+        }
+    };
+
+    m.mount(document.body, MainView);
+
+</script>
+</body>
+</html>

@@ -11,49 +11,24 @@
 <body>
 
 <script>
-    var QuadModel = {
+    var QueryModel = {
         subject: "",
         predicate: "",
         object: "",
         graph: "",
-        insertQuad: function () {
-            return m.request({
-                method: "POST",
-                url: "/ldf", 
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer <token>" 
-                },
-                body: {
-                    subject: QuadModel.subject,
-                    predicate: QuadModel.predicate,
-                    object: QuadModel.object,
-                    graph: QuadModel.graph,
-                },
-            })
-            .then(() => {
-                alert("Quad inséré avec succès !");
-                QuadModel.subject = "";
-                QuadModel.predicate = "";
-                QuadModel.object = "";
-                QuadModel.graph = "";
-            })
-            .catch((error) => {
-                console.error("Erreur :", error);
-                alert("Erreur lors de l'insertion du quad.");
-            });
-        },
-    };
-
-    var QueryModel = {
-        predicate: "",
         results: [],
         executionTime: null,
         cursor: null,
         fetchQuads: function () {
+            if (QueryModel.subject && QueryModel.object && QueryModel.object || QueryModel.subject == "" && QueryModel.object == "" && QueryModel.object == ""){
             var url = QueryModel.cursor
-                ? `/ldf?predicate=${encodeURIComponent(QueryModel.predicate)}&cursor=${QueryModel.cursor}`
-                : `/ldf?predicate=${encodeURIComponent(QueryModel.predicate)}`;
+                ? `_ah/api/myApi/v1/getQuads/${encodeURIComponent(QueryModel.cursor)}`+
+                `/?subject=${encodeURIComponent(QueryModel.subject)}&`+
+                   `predicate=${encodeURIComponent(QueryModel.predicate)}&`+
+                   `object=${encodeURIComponent(QueryModel.object)}`
+                : `_ah/api/myApi/v1/getQuads/null?subject=${encodeURIComponent(QueryModel.subject)}&`+
+                   `predicate=${encodeURIComponent(QueryModel.predicate)}&`+
+                   `object=${encodeURIComponent(QueryModel.object)}`;
             var startTime = performance.now();
             return m.request({ method: "GET", url: url })
                 .then((response) => {
@@ -65,6 +40,10 @@
                     console.error("Erreur :", error);
                     alert("Erreur lors de la requête.");
                 });
+            }
+            else{
+                alert("Veuillez écrire un sujet, prédicat et un objet");
+            }
         }
     };
 
@@ -73,11 +52,26 @@
             return m('div', [
                 m('h1', { class: 'title' }, "Requêtage de Quads"),
                 m('form', { onsubmit: (e) => e.preventDefault() }, [
+                    m("input[type=text][placeholder=Sujet]", {
+                        value: QueryModel.subject,
+                        class: "input is-rounded",
+                        oninput: (e) => QueryModel.subject = e.target.value
+                    }),
                     m("input[type=text][placeholder=Prédicat]", {
                         value: QueryModel.predicate,
                         class: "input is-rounded",
                         oninput: (e) => QueryModel.predicate = e.target.value
                     }),
+                    m("input[type=text][placeholder=Objet]", {
+                        value: QueryModel.object,
+                        class: "input is-rounded",
+                        oninput: (e) => QueryModel.object = e.target.value
+                    }),
+                    // m("input[type=text][placeholder=Graph]", {
+                    //     value: QueryModel.Graph,
+                    //     class: "input is-rounded",
+                    //     oninput: (e) => QueryModel.graph = e.target.value
+                    // }),
                     m("button", {
                         class: "button is-link",
                         onclick: QueryModel.fetchQuads

@@ -34,10 +34,6 @@ handlers:
   script: unused
   login: optional
   secure: optional
-- url: /hello
-  script: unused
-  login: optional
-  secure: optional
 - url: /.*/
   script: unused
   login: optional

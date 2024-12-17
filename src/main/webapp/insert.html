@@ -7,32 +7,92 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
     <script src="https://unpkg.com/mithril/mithril.js"></script>
-</head>
-<body>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    </head>
+    <body>
+    <script>
+    
+    var Login = {
+      name:"",
+      email:"",
+      ID:"",
+      url:"",
+      token:"",
+      handleCredential: function(response) {
+        console.log("callback called:"+response.credential)
+        // decodeJwtResponse() is a custom function defined by you
+        // to decode the credential response.
+        const responsePayload = jwt_decode(response.credential);
+       
+        console.log("ID: " + responsePayload.sub);
+        console.log('Full Name: ' + responsePayload.name);
+        console.log('Given Name: ' + responsePayload.given_name);
+        console.log('Family Name: ' + responsePayload.family_name);
+        console.log("Image URL: " + responsePayload.picture);
+        console.log("Email: " + responsePayload.email);
+    
+        Login.name=responsePayload.name
+        Login.email= responsePayload.email
+        Login.ID=response.credential
+        Login.url= responsePayload.picture 
+        Login.token=response.credential
+        // external event
+        m.redraw()
+    }
+    
+    }
+    
+    var LoginView = {
+        view: function() {
+         return m('div', {class:'container'}, [
+          m("h1", {class: 'title'}, 'Login'),
+          m("div", {
+                 "id":"g_id_onload",
+                 "data-client_id":"70609645985-gkmqrn9keiilqrla80e13hpgbjceb1ir.apps.googleusercontent.com",
+               "data-callback": "handleCredentialResponse"}),
+          m("div", {
+                 "class":"g_id_signin",
+                 "data-type":"standard"}),
+          m("li", {class: 'content'}, "name:"+Login.name),
+          m("li", {class: 'content'}, "email:"+Login.email),
+          m("img",{"src":Login.url}),
+          ])
+        }
+    
+    }
+    
+    function handleCredentialResponse(response) {
+        console.log("callback called:"+response.credential)
+        Login.handleCredential(response)
+    }
 
-<script>
     var QuadModel = {
         subject: "",
         predicate: "",
         object: "",
         graph: "",
         insertQuad: function () {
+            console.log("_ah/api/myApi/v1/insertQuad/"
+     + encodeURIComponent(QuadModel.subject) + "/"
+     + encodeURIComponent(QuadModel.predicate) + "/"
+     + encodeURIComponent(QuadModel.object) + "/"
+     + encodeURIComponent(QuadModel.graph)
+     + '?access_token=' + encodeURIComponent(Login.token))
             return m.request({
-                method: "POST",
-                url: "/ldf", 
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer <token>" 
-                },
-                body: {
-                    subject: QuadModel.subject,
-                    predicate: QuadModel.predicate,
-                    object: QuadModel.object,
-                    graph: QuadModel.graph,
-                },
+                method: "GET",
+                url: "_ah/api/myApi/v1/insertQuad/"
+     + encodeURIComponent(QuadModel.subject) + "/"
+     + encodeURIComponent(QuadModel.predicate) + "/"
+     + encodeURIComponent(QuadModel.object) + "/"
+     + encodeURIComponent(QuadModel.graph)
+     + '?access_token=' + encodeURIComponent(Login.token)
+
             })
-            .then(() => {
-                alert("Quad inséré avec succès !");
+            .then((response) => {
+                alert("Quad inséré avec succès !","Subject : ",QuadModel.subject);
+                console.log(response);
                 QuadModel.subject = "";
                 QuadModel.predicate = "";
                 QuadModel.object = "";
@@ -45,7 +105,6 @@
         },
     };
 
-    // Vue pour l'insertion de quads
     var InsertQuadView = {
         view: function () {
             return m('div', [
@@ -73,75 +132,9 @@
                     }),
                     m("button", {
                         class: "button is-link",
+                        disabled: Login.name==='',
                         onclick: QuadModel.insertQuad
                     }, "Insérer"),
-                ]),
-            ]);
-        }
-    };
-
-    var QueryModel = {
-        predicate: "",
-        results: [],
-        executionTime: null,
-        cursor: null,
-        fetchQuads: function () {
-            var url = QueryModel.cursor
-                ? `/ldf?predicate=${encodeURIComponent(QueryModel.predicate)}&cursor=${QueryModel.cursor}`
-                : `/ldf?predicate=${encodeURIComponent(QueryModel.predicate)}`;
-            var startTime = performance.now();
-            return m.request({ method: "GET", url: url })
-                .then((response) => {
-                    QueryModel.results = response.quads;
-                    QueryModel.cursor = response.nextCursor;
-                    QueryModel.executionTime = performance.now() - startTime;
-                })
-                .catch((error) => {
-                    console.error("Erreur :", error);
-                    alert("Erreur lors de la requête.");
-                });
-        }
-    };
-
-    var QueryQuadView = {
-        view: function () {
-            return m('div', [
-                m('h1', { class: 'title' }, "Requêtage de Quads"),
-                m('form', { onsubmit: (e) => e.preventDefault() }, [
-                    m("input[type=text][placeholder=Prédicat]", {
-                        value: QueryModel.predicate,
-                        class: "input is-rounded",
-                        oninput: (e) => QueryModel.predicate = e.target.value
-                    }),
-                    m("button", {
-                        class: "button is-link",
-                        onclick: QueryModel.fetchQuads
-                    }, "Rechercher"),
-                ]),
-                m('div', [
-                    QueryModel.executionTime && m("p", `Temps d'exécution : ${QueryModel.executionTime.toFixed(2)} ms`),
-                    m('table', { class: 'table is-striped' }, [
-                        m('thead', m('tr', [
-                            m('th', "Sujet"),
-                            m('th', "Prédicat"),
-                            m('th', "Objet"),
-                            m('th', "Graph"),
-                        ])),
-                        m('tbody',
-                            QueryModel.results.map((quad) =>
-                                m('tr', [
-                                    m('td', quad.subject),
-                                    m('td', quad.predicate),
-                                    m('td', quad.object),
-                                    m('td', quad.graph),
-                                ])
-                            )
-                        ),
-                    ]),
-                    QueryModel.cursor && m("button", {
-                        class: "button is-link",
-                        onclick: QueryModel.fetchQuads
-                    }, "Page suivante"),
                 ]),
             ]);
         }
@@ -154,13 +147,12 @@
                 m("h1", { class: 'title' }, 'Linked Data Fragment App'),
                 m('div', { class: 'tile is-ancestor' }, [
                     m('div', { class: 'tile is-child box' }, m(InsertQuadView)),
-                    m('div', { class: 'tile is-child box' }, m(QueryQuadView)),
+                    m('div', { class: 'tile is-child box' }, m(LoginView)),
                 ])
             ]);
         }
     };
-
-    // Montage de l'application
+    
     m.mount(document.body, MainView);
 
 </script>

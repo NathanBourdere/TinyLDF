@@ -2,5 +2,5 @@ indexes:
 - kind: "Quad"
   properties:
   - name: "predicate"
-  - name: "timestamp"
+  - name: "subject"
     direction: asc
