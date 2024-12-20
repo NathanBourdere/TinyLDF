@@ -10,62 +10,33 @@
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    </head>
-    <body>
-    <script>
-    
+</head>
+<body>
+<script>
     var Login = {
-      name:"",
-      email:"",
-      ID:"",
-      url:"",
-      token:"",
-      handleCredential: function(response) {
-        console.log("callback called:"+response.credential)
-        // decodeJwtResponse() is a custom function defined by you
-        // to decode the credential response.
-        const responsePayload = jwt_decode(response.credential);
-       
-        console.log("ID: " + responsePayload.sub);
-        console.log('Full Name: ' + responsePayload.name);
-        console.log('Given Name: ' + responsePayload.given_name);
-        console.log('Family Name: ' + responsePayload.family_name);
-        console.log("Image URL: " + responsePayload.picture);
-        console.log("Email: " + responsePayload.email);
-    
-        Login.name=responsePayload.name
-        Login.email= responsePayload.email
-        Login.ID=response.credential
-        Login.url= responsePayload.picture 
-        Login.token=response.credential
-        // external event
-        m.redraw()
-    }
-    
-    }
-    
-    var LoginView = {
-        view: function() {
-         return m('div', {class:'container'}, [
-          m("h1", {class: 'title'}, 'Login'),
-          m("div", {
-                 "id":"g_id_onload",
-                 "data-client_id":"70609645985-gkmqrn9keiilqrla80e13hpgbjceb1ir.apps.googleusercontent.com",
-               "data-callback": "handleCredentialResponse"}),
-          m("div", {
-                 "class":"g_id_signin",
-                 "data-type":"standard"}),
-          m("li", {class: 'content'}, "name:"+Login.name),
-          m("li", {class: 'content'}, "email:"+Login.email),
-          m("img",{"src":Login.url}),
-          ])
+        name: "",
+        email: "",
+        ID: "",
+        url: "",
+        token: "",
+        handleCredential: function (response) {
+            console.log("callback called:" + response.credential);
+            const responsePayload = jwt_decode(response.credential);
+
+            console.log("ID: " + responsePayload.sub);
+            console.log('Full Name: ' + responsePayload.name);
+            console.log('Email: ' + responsePayload.email);
+
+            Login.name = responsePayload.name;
+            Login.email = responsePayload.email;
+            Login.url = responsePayload.picture;
+            Login.token = response.credential;
+            m.redraw();
         }
-    
-    }
-    
+    };
+
     function handleCredentialResponse(response) {
-        console.log("callback called:"+response.credential)
-        Login.handleCredential(response)
+        Login.handleCredential(response);
     }
 
     var QuadModel = {
@@ -74,40 +45,29 @@
         object: "",
         graph: "",
         insertQuad: function () {
-            console.log("_ah/api/myApi/v1/insertQuad/"
-     + encodeURIComponent(QuadModel.subject) + "/"
-     + encodeURIComponent(QuadModel.predicate) + "/"
-     + encodeURIComponent(QuadModel.object) + "/"
-     + encodeURIComponent(QuadModel.graph)
-     + '?access_token=' + encodeURIComponent(Login.token))
+            console.log("Insertion Quad :", QuadModel.subject, QuadModel.predicate, QuadModel.object, QuadModel.graph);
+
             return m.request({
                 method: "GET",
                 url: "_ah/api/myApi/v1/insertQuad/"
-     + encodeURIComponent(QuadModel.subject) + "/"
-     + encodeURIComponent(QuadModel.predicate) + "/"
-     + encodeURIComponent(QuadModel.object) + "/"
-     + encodeURIComponent(QuadModel.graph)
-     + '?access_token=' + encodeURIComponent(Login.token)
-
+                    + encodeURIComponent(QuadModel.subject) + "/"
+                    + encodeURIComponent(QuadModel.predicate) + "/"
+                    + encodeURIComponent(QuadModel.object) + "/"
+                    + encodeURIComponent(QuadModel.graph)
+                    + '?access_token=' + encodeURIComponent(Login.token)
             })
-            .then((response) => {
-                alert("Quad inséré avec succès !","Subject : ",QuadModel.subject);
-                console.log(response);
-                QuadModel.subject = "";
-                QuadModel.predicate = "";
-                QuadModel.object = "";
-                QuadModel.graph = "";
-            })
-            .catch((error) => {
-                console.error("Erreur :", error);
-                alert("Erreur lors de l'insertion du quad.");
-            });
+                .then(() => {
+                    console.log("Quad inséré :", QuadModel.subject);
+                })
+                .catch((error) => {
+                    console.error("Erreur lors de l'insertion :", error);
+                });
         },
     };
 
     var InsertQuadView = {
         view: function () {
-            return m('div', [
+            return m('div', { class: 'box' }, [
                 m('h1', { class: 'title' }, "Insertion de Quads"),
                 m('form', { onsubmit: (e) => e.preventDefault() }, [
                     m("input[type=text][placeholder=Sujet]", {
@@ -132,29 +92,47 @@
                     }),
                     m("button", {
                         class: "button is-link",
-                        disabled: Login.name==='',
+                        disabled: Login.name === '',
                         onclick: QuadModel.insertQuad
                     }, "Insérer"),
-                ]),
+                ])
             ]);
         }
     };
 
-    // Vue principale
+    var LoginView = {
+        view: function () {
+            return m('div', { class: 'box' }, [
+                m("h1", { class: 'title' }, 'Login'),
+                m("div", {
+                    id: "g_id_onload",
+                    "data-client_id": "70609645985-gkmqrn9keiilqrla80e13hpgbjceb1ir.apps.googleusercontent.com",
+                    "data-callback": "handleCredentialResponse"
+                }),
+                m("div", {
+                    class: "g_id_signin",
+                    "data-type": "standard"
+                }),
+                m("p", { class: 'content' }, "Nom : " + Login.name),
+                m("p", { class: 'content' }, "Email : " + Login.email),
+                Login.url ? m("img", { src: Login.url, style: "max-width:100px; border-radius:50%;" }) : null
+            ]);
+        }
+    };
+
     var MainView = {
         view: function () {
             return m('div', { class: 'container' }, [
                 m("h1", { class: 'title' }, 'Linked Data Fragment App'),
                 m('div', { class: 'tile is-ancestor' }, [
-                    m('div', { class: 'tile is-child box' }, m(InsertQuadView)),
-                    m('div', { class: 'tile is-child box' }, m(LoginView)),
+                    m('div', { class: 'tile is-child' }, m(InsertQuadView)),
+                    m('div', { class: 'tile is-child' }, m(LoginView))
                 ])
             ]);
         }
     };
-    
-    m.mount(document.body, MainView);
 
+    m.mount(document.body, MainView);
 </script>
 </body>
 </html>

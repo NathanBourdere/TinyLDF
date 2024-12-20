@@ -19,35 +19,55 @@
         results: [],
         executionTime: null,
         cursor: null,
+        pageCount: 0,
+        triplesPerPage: 0,
+        totalTriples: 0,
+
         fetchQuads: function () {
-            if (QueryModel.subject && QueryModel.object && QueryModel.object || QueryModel.subject == "" && QueryModel.object == "" && QueryModel.object == ""){
             var url = QueryModel.cursor
-                ? `_ah/api/myApi/v1/getQuads/${encodeURIComponent(QueryModel.cursor)}`+
-                `/?subject=${encodeURIComponent(QueryModel.subject)}&`+
-                   `predicate=${encodeURIComponent(QueryModel.predicate)}&`+
-                   `object=${encodeURIComponent(QueryModel.object)}`
-                : `_ah/api/myApi/v1/getQuads/null?subject=${encodeURIComponent(QueryModel.subject)}&`+
-                   `predicate=${encodeURIComponent(QueryModel.predicate)}&`+
-                   `object=${encodeURIComponent(QueryModel.object)}`;
+                ? `_ah/api/myApi/v1/getQuads/${encodeURIComponent(QueryModel.cursor)}` +
+                  `/?subject=${encodeURIComponent(QueryModel.subject)}&` +
+                  `predicate=${encodeURIComponent(QueryModel.predicate)}&` +
+                  `object=${encodeURIComponent(QueryModel.object)}`
+                : `_ah/api/myApi/v1/getQuads/null?subject=${encodeURIComponent(QueryModel.subject)}&` +
+                  `predicate=${encodeURIComponent(QueryModel.predicate)}&` +
+                  `object=${encodeURIComponent(QueryModel.object)}`;
+
             var startTime = performance.now();
             return m.request({ method: "GET", url: url })
                 .then((response) => {
+                    if (QueryModel.cursor = null){
+                        QueryModel.cursor = null
+                        QueryModel.triplesPerPage = 0
+                        QueryModel.pageCount = 0
+                    }
                     QueryModel.results = response.quads;
                     QueryModel.cursor = response.nextCursor;
                     QueryModel.executionTime = performance.now() - startTime;
+                    QueryModel.triplesPerPage = response.quads.length;
+                    QueryModel.pageCount++;
                 })
                 .catch((error) => {
                     console.error("Erreur :", error);
                     alert("Erreur lors de la requête.");
                 });
-            }
-            else{
-                alert("Veuillez écrire un sujet, prédicat et un objet");
-            }
+        },
+
+        fetchTotalTriples: function () {
+            var url = "_ah/api/myApi/v1/getCounter";
+            return m.request({ method: "GET", url: url })
+                .then((response) => {
+                    QueryModel.totalTriples = response.properties.count;
+                })
+                .catch((error) => {
+                    console.error("Erreur lors de la récupération du compteur :", error);
+                    QueryModel.totalTriples = "Inconnu";
+                });
         }
     };
 
     var QueryQuadView = {
+        oninit: QueryModel.fetchTotalTriples,
         view: function () {
             return m('div', [
                 m('h1', { class: 'title' }, "Requêtage de Quads"),
@@ -55,30 +75,44 @@
                     m("input[type=text][placeholder=Sujet]", {
                         value: QueryModel.subject,
                         class: "input is-rounded",
-                        oninput: (e) => QueryModel.subject = e.target.value
+                        oninput: (e) => {
+                            QueryModel.cursor = null;
+                            QueryModel.pageCount = 0;
+                            QueryModel.triplesPerPage = 0;
+                            QueryModel.subject = e.target.value;
+                        }
                     }),
                     m("input[type=text][placeholder=Prédicat]", {
                         value: QueryModel.predicate,
                         class: "input is-rounded",
-                        oninput: (e) => QueryModel.predicate = e.target.value
+                        oninput: (e) => {
+                            QueryModel.cursor = null;
+                            QueryModel.pageCount = 0;
+                            QueryModel.triplesPerPage = 0;
+                            QueryModel.predicate = e.target.value;
+                        }
                     }),
                     m("input[type=text][placeholder=Objet]", {
                         value: QueryModel.object,
                         class: "input is-rounded",
-                        oninput: (e) => QueryModel.object = e.target.value
+                        oninput: (e) => {
+                            QueryModel.cursor = null;
+                            QueryModel.pageCount = 0;
+                            QueryModel.triplesPerPage = 0;
+                            QueryModel.object = e.target.value;
+                        }
                     }),
-                    // m("input[type=text][placeholder=Graph]", {
-                    //     value: QueryModel.Graph,
-                    //     class: "input is-rounded",
-                    //     oninput: (e) => QueryModel.graph = e.target.value
-                    // }),
                     m("button", {
                         class: "button is-link",
                         onclick: QueryModel.fetchQuads
                     }, "Rechercher"),
                 ]),
                 m('div', [
-                    QueryModel.executionTime && m("p", `Temps d'exécution : ${QueryModel.executionTime.toFixed(2)} ms`),
+                    m("p", `Nombre total de triples dans la base : ${QueryModel.totalTriples}`),
+                    QueryModel.executionTime &&
+                        m("p", `Nombre total de résultats jusqu'à présent : ${QueryModel.pageCount * QueryModel.triplesPerPage}`),
+                    QueryModel.executionTime &&
+                        m("p", `Temps d'exécution : ${QueryModel.executionTime.toFixed(2)} ms`),
                     m('table', { class: 'table is-striped' }, [
                         m('thead', m('tr', [
                             m('th', "Sujet"),
@@ -86,21 +120,21 @@
                             m('th', "Objet"),
                             m('th', "Graph"),
                         ])),
-                        m('tbody',
-                            QueryModel.results.map((quad) =>
-                                m('tr', [
-                                    m('td', quad.subject),
-                                    m('td', quad.predicate),
-                                    m('td', quad.object),
-                                    m('td', quad.graph),
-                                ])
-                            )
-                        ),
+                        m('tbody', QueryModel.results.map((quad) =>
+                            m('tr', [
+                                m('td', quad.properties.subject || "N/A"),
+                                m('td', quad.properties.predicate || "N/A"),
+                                m('td', quad.properties.object || "N/A"),
+                                m('td', quad.properties.graph || "N/A"),
+                            ])
+                        ))
                     ]),
-                    QueryModel.cursor && m("button", {
-                        class: "button is-link",
-                        onclick: QueryModel.fetchQuads
-                    }, "Page suivante"),
+                    QueryModel.cursor &&
+                        m("button", {
+                            class: "button is-link",
+                            disabled: QueryModel.results.length === 0,
+                            onclick: QueryModel.fetchQuads
+                        }, "Page suivante"),
                 ]),
             ]);
         }

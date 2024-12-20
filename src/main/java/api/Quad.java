@@ -1,5 +1,6 @@
 package api;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -40,6 +41,11 @@ import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.QueryResultList;
 import com.google.appengine.api.datastore.Transaction;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.io.FileReader;
+import java.lang.reflect.Type;
 
 @Api(name = "myApi",
      version = "v1",
@@ -90,15 +96,12 @@ public Entity insertQuad(User user,
         long currentCount = (long) counter.getProperty("count");
         counter.setProperty("count", currentCount + 1);
 
-        // Save the updated counter
         datastore.put(counter);
 
-        // Commit the transaction
         txn.commit();
 
         return quad;
     } finally {
-        // Rollback transaction in case of failure
         if (txn.isActive()) {
             txn.rollback();
         }
@@ -114,9 +117,13 @@ public Entity insertQuad(User user,
 		@Named("cursor") String cursorString) {
 			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 			Query query = new Query("Quad");
-			if (predicate != null || predicate != ""){ // si un des trois est null, alors les trois le sont.
+			if (subject != null && subject != ""){ 
 				query.setFilter(new FilterPredicate("subject", FilterOperator.EQUAL, subject));
-				query.setFilter(new FilterPredicate("predicate", FilterOperator.EQUAL, predicate));
+			}
+            if (predicate != null && predicate != ""){ 
+                query.setFilter(new FilterPredicate("predicate", FilterOperator.EQUAL, predicate));
+			}
+            if (object != null && object != ""){
 				query.setFilter(new FilterPredicate("object", FilterOperator.EQUAL, object));
 			}
 			PreparedQuery preparedQuery = datastore.prepare(query);
@@ -131,5 +138,34 @@ public Entity insertQuad(User user,
 			response.put("nextCursor", results.getCursor().toWebSafeString());
 			return response;
 		}
+
+        @ApiMethod(name = "getCounter",path="getCounter", httpMethod = ApiMethod.HttpMethod.GET)
+        public Object getCounter() throws EntityNotFoundException{
+            DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+			Key counterKey = KeyFactory.createKey("Counter", "QuadCounter");
+            Entity counter;
+            counter = datastore.get(counterKey);
+            return counter;
+        }
+
+class QuadDTO {
+    private String subject;
+    private String predicate;
+    private String object;
+    private String graph;
+
+    // Getters et setters
+    public String getSubject() { return subject; }
+    public void setSubject(String subject) { this.subject = subject; }
+    
+    public String getPredicate() { return predicate; }
+    public void setPredicate(String predicate) { this.predicate = predicate; }
+    
+    public String getObject() { return object; }
+    public void setObject(String object) { this.object = object; }
+    
+    public String getGraph() { return graph; }
+    public void setGraph(String graph) { this.graph = graph; }
+}
 }
 	
